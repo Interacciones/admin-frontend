@@ -82,7 +82,7 @@ export default function Postulations() {
 
     const fetchPostulaciones = async () => {
             try {
-                const response = await fetch((`http://localhost:3000/admin-tutors/getAllUnaccepted`), {
+                const response = await fetch((`http://localhost:3000/unaccepted-tutors`), {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

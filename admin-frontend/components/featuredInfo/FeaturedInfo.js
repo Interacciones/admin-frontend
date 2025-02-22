@@ -18,9 +18,9 @@ export default function FeaturedInfo() {
                 },
             });
             const result = await response.json();
-            setPostulations(result.numberTutors);
-            setRegisteres(result.numberUsers);
-            setReports(result.numberReports);
+            setPostulations(result.data.unpublishedTutorsCount);
+            setRegisteres(result.data.totalUsersCount);
+            setReports(result.data.pendingReportsCount);
         } catch (error) {
             console.error('Error fetching data:', error);
         }

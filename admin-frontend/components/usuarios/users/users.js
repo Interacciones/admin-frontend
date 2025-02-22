@@ -13,7 +13,7 @@ import {
   ArrowDownIcon,
   ArrowUpIcon,
 } from '@heroicons/react/24/outline';
-import { UserAuth } from '../../../context/AuthContext';
+import { UserAuth } from '../../context/AuthContext';
 
 
 export default function Users() {
@@ -40,7 +40,7 @@ export default function Users() {
 
   const fetchProfiles = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/admin-users/getAll`, {
+        const response = await fetch(`http://localhost:3000/users`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -48,8 +48,8 @@ export default function Users() {
           },
         });
         const result = await response.json();
-        // Agregar un campo 'blocked' a los datos si no existe
-        const usersWithBlockedState = result.map(user => ({ ...user, blocked: !user.active || false}));
+        // Actualizar los datos con la nueva estructura
+        const usersWithBlockedState = result.data.map(user => ({ ...user, blocked: user.isBanned }));
         setData(usersWithBlockedState);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -73,7 +73,7 @@ export default function Users() {
 
   const handleBloquear = (user) => {
     setSelectedUser(user);
-    if (!user.active) {
+    if (user.isBanned) {
       setActionType('desbanear');
     } else {
       setActionType('banear');
@@ -88,15 +88,15 @@ export default function Users() {
   const confirmAction = async () => {
     setShowModal(false);
     // Encuentra el usuario en la lista de datos
-    const userToModify = data.find((user) => user.id === selectedUser.id);
+    const userToModify = data.find((user) => user.email === selectedUser.email);
     if (userToModify) {
       // Verificar si el usuario está bloqueado
-      const isBlocked = userToModify.active;
+      const isBlocked = userToModify.isBanned;
 
-      if ((actionType === 'banear' && isBlocked) || (actionType === 'desbanear' && !isBlocked)) {
+      if ((actionType === 'banear' && !isBlocked) || (actionType === 'desbanear' && isBlocked)) {
         const actionUrl = actionType === 'banear'
-          ? `http://localhost:3000/admin-users/ban/${selectedUser.id}`
-          : `http://localhost:3000/admin-users/unban/${selectedUser.id}`;
+          ? `http://localhost:3000/admin-users/ban/${selectedUser.email}`
+          : `http://localhost:3000/admin-users/unban/${selectedUser.email}`;
 
         // Enviar la solicitud al backend
         await fetch(actionUrl, {
@@ -110,7 +110,7 @@ export default function Users() {
           });
         fetchProfiles();
       } else {
-        console.error(`El usuario ya está ${actionType === 'banear' ? 'desbanear' : 'desbaneado'}`);
+        console.error(`El usuario ya está ${actionType === 'banear' ? 'baneado' : 'desbaneado'}`);
       }
     } else {
       console.error('Usuario no encontrado en la lista de datos');

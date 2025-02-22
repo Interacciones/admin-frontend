@@ -8,10 +8,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "../../firebase";
+import { auth } from "../firebase";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
-import RouteLoader from "../../components/RouteLoader";
+import RouteLoader from "../RouteLoader";
 
 
 export default function Usuarios() {
