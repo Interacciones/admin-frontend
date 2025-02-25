@@ -38,13 +38,13 @@ export default function CommentsReports() {
         let sorted = [...reports];
         switch (sortOrder) {
             case 'name':
-                sorted.sort((a, b) => a.userId.name.localeCompare(b.userId.name));
+                sorted.sort((a, b) => a.userReporting.name.localeCompare(b.userReporting.name));
                 break;
             case 'dateStart':
                 if(sortDirection === 'asc') {
-                    sorted.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+                    sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                 } else {
-                    sorted.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+                    sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
                 }
                 break;
             default:
@@ -118,7 +118,7 @@ export default function CommentsReports() {
 
     const fetchReportes = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/reviewreports/getPending`, {
+            const response = await fetch(`http://localhost:3000/reports/review`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ export default function CommentsReports() {
                 }
             });
             const result = await response.json();
-            setReports(result);
+            setReports(result.data);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -195,7 +195,7 @@ export default function CommentsReports() {
                                 onClick={ () => loadPostulacion( obj.id ) }
                                 className="bg-white dark:bg-slate-900 h-14 text-center py-3 px-4 border-b-2 border-gray-200 dark:border-slate-700 hover:bg-gray-300" 
                                 key={i}>
-                                    <td>{ obj.reportingUser.email }</td>
+                                    <td>{ obj.userReporting.email }</td>
                                     <td>{ new Date(obj.createdAt).toISOString().slice(0, 10) }</td>
                                 </tr>
                             ))
@@ -210,12 +210,12 @@ export default function CommentsReports() {
                 <div className="mx-4 w-1/2">
                     {report.id ? (
                         <div className="bg-white dark:bg-slate-900 justify-center border-t border-gray-100 dark:border-slate-700">
-                                <h2 className="text-2xl mt-2">Comentario reportado por {report.reportingUser.name + " " + report.reportingUser.lastName}</h2>
+                                <h2 className="text-2xl mt-2">Comentario reportado por {report.userReporting.name + " " + report.userReporting.lastName}</h2>
                                 <dl className="divide-y divide-gray-300 dark:divide-slate-700">
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Correo creador reporte</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
-                                            { report.reportingUser.email }
+                                            { report.userReporting.email }
                                         </dd>
                                     </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

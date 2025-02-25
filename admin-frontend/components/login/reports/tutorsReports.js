@@ -11,7 +11,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { UserAuth } from '../../context/AuthContext';
 
-
 export default function TutorsReports() {
     const [reports, setReports] = useState([]);
     const [report, setReport] = useState({});
@@ -38,13 +37,13 @@ export default function TutorsReports() {
         let sorted = [...reports];
         switch (sortOrder) {
             case 'name':
-                sorted.sort((a, b) => a.userId.name.localeCompare(b.userId.name));
+                sorted.sort((a, b) => a.tutor.name.localeCompare(b.tutor.name));
                 break;
             case 'dateStart':
                 if(sortDirection === 'asc') {
-                    sorted.sort((a, b) => new Date(b.startDate) - new Date(a.startDate));
+                    sorted.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
                 } else {
-                    sorted.sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
+                    sorted.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
                 }
                 break;
             default:
@@ -82,7 +81,6 @@ export default function TutorsReports() {
   
     const fetchDelete = async (datoDinamico) => {
         try {
-            // TODO
             const response = await fetch((`http://localhost:3000/admin-reports/delete/${datoDinamico}`), {
                 method: 'DELETE',
                 headers: {
@@ -105,7 +103,7 @@ export default function TutorsReports() {
 
     const fetchReportes = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/admin-reports/Unreviewed`, {
+            const response = await fetch(`http://localhost:3000/reports/tutor`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -113,7 +111,7 @@ export default function TutorsReports() {
                 }
             });
             const result = await response.json();
-            setReports(result);
+            setReports(result.data);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -182,7 +180,7 @@ export default function TutorsReports() {
                                 onClick={ () => loadPostulacion( obj.id ) }
                                 className="bg-white dark:bg-slate-900 h-14 text-center py-3 px-4 border-b-2 border-gray-200 dark:border-slate-700 hover:bg-gray-300" 
                                 key={i}>
-                                    <td>{ obj.user.name + " " + obj.user.lastName }</td>
+                                    <td>{ obj.tutor.name + " " + obj.tutor.lastName }</td>
                                     <td>{ new Date(obj.createdAt).toISOString().slice(0, 10) }</td>
                                 </tr>
                             ))
@@ -197,24 +195,24 @@ export default function TutorsReports() {
                 <div className="mx-4 w-1/2">
                     {report.id ? (
                         <div className="bg-white dark:bg-slate-900 justify-center border-t border-gray-100 dark:border-slate-700">
-                                <h2 className="text-2xl mt-2">Reporte a {report.user.name + " " + report.user.lastName}</h2>
+                                <h2 className="text-2xl mt-2">Reporte a {report.tutor.name + " " + report.tutor.lastName}</h2>
                                 <dl className="divide-y divide-gray-300 dark:divide-slate-700">
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Mail tutor</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
-                                            { report.user.email }
+                                            { report.tutor.email }
                                         </dd>
                                     </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Mail creador reporte</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
-                                            { report.userReport.email }
+                                            { report.userReporting.email }
                                         </dd>
                                     </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Descripcion del reporte</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
-                                            { report.content }
+                                            { report.description }
                                         </dd>
                                     </div>
                                     <div className="flex flex-row justify-around">

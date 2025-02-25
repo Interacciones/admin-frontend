@@ -48,7 +48,7 @@ export default function Postulations() {
 
     const fetchYes = async (datoDinamico) => {
         try {
-            const response = await fetch((`http://localhost:3000/admin-tutors/accept/${datoDinamico}`), {
+            const response = await fetch((`http://localhost:3000/tutors/accept/${datoDinamico}`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ export default function Postulations() {
     
     const fetchNo = async (datoDinamico) => {
         try {
-            const response = await fetch((`http://localhost:3000/admin-tutors/reject/${datoDinamico}`), {
+            const response = await fetch((`http://localhost:3000/tutors/reject/${datoDinamico}`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -81,19 +81,19 @@ export default function Postulations() {
     };
 
     const fetchPostulaciones = async () => {
-            try {
-                const response = await fetch((`http://localhost:3000/unaccepted-tutors`), {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
-                    },
-                });
-                const result = await response.json();
-                setPostulations(result);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
+        try {
+            const response = await fetch((`http://localhost:3000/unaccepted-tutors`), {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
+                },
+            });
+            const result = await response.json();
+            setPostulations(result.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        }
     };
     
     const loadPostulacion = (id) => {
@@ -168,18 +168,24 @@ export default function Postulations() {
                     {postulation.id?(
                         <div className="bg-white dark:bg-slate-900 justify-center border-t border-gray-100 dark:border-slate-700">
                             <form action="#" method="POST" className="mx-auto mt-4 overflow-scroll">
-                                <h2 className="text-2xl">Postulación de {postulation.name}</h2>
+                                <h2 className="text-2xl">Postulación de {postulation.name} {postulation.lastName}</h2>
                                 <dl className="divide-y divide-gray-300 dark:divide-slate-700">
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Email</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
-                                            { postulation.contactMail }
+                                            { postulation.email }
                                         </dd>
                                     </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Ramos</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
-                                            { postulation.coursesInfo.join(", ") }
+                                            { postulation.courses.join(", ") }
+                                        </dd>
+                                    </div>
+                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Áreas</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
+                                            { postulation.subjects.join(", ") }
                                         </dd>
                                     </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
