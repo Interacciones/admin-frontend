@@ -210,22 +210,34 @@ export default function TutorsReports() {
                                         </dd>
                                     </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Descripcion del reporte</dt>
+                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Nombre creador reporte</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
+                                            { report.userReporting.name + " " + report.userReporting.lastName }
+                                        </dd>
+                                    </div>
+                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Descripción del reporte</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
                                             { report.description }
+                                        </dd>
+                                    </div>
+                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Foto del tutor</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 w-40 sm:col-span-2 sm:mt-0">
+                                            <img src={report.tutor.photo} alt="Foto del tutor"></img>
                                         </dd>
                                     </div>
                                     <div className="flex flex-row justify-around">
                                         <button
                                         type="submit"
                                         onClick={() => fetchDelete(report.id)}
-                                        className="bg-red-700 my-4 ml-4 w-32 h-12 col-start-2 text-white rounded-md shadow-lg hover:bg-green-300">
+                                        className="bg-red-700 my-4 ml-4 w-32 h-12 text-white rounded-md shadow-lg hover:bg-green-300">
                                             Eliminar
                                         </button>
                                         <button
                                         type="submit"
                                         onClick={() => fetchUpdate(report.id)}
-                                        className="bg-green-700 my-4 ml-4 w-32 h-12 col-start-4 text-white rounded-md shadow-lg hover:bg-green-300">
+                                        className="bg-green-700 my-4 ml-4 w-32 h-12 text-white rounded-md shadow-lg hover:bg-green-300">
                                             Banear tutor
                                         </button>
                                     </div>

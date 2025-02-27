@@ -11,7 +11,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { UserAuth } from '../../context/AuthContext';
 
-
 export default function CommentsReports() {
     const [reports, setReports] = useState([]);
     const [report, setReport] = useState({});
@@ -162,7 +161,7 @@ export default function CommentsReports() {
                                 onClick={() => toggleSortOrder('name')}
                             >
                                 <div className="flex items-center justify-center">
-                                    <span className="px-2 text-slate-700 dark:text-slate-400">Correo creador reporte</span>
+                                    <span className="px-2 text-slate-700 dark:text-slate-400">Usuario reportado</span>
                                     {sortOrder === 'name' && sortDirection === 'asc' && (
                                     <ArrowUpIcon className="h-4 w-4" aria-hidden="true" />
                                     )}
@@ -195,7 +194,7 @@ export default function CommentsReports() {
                                 onClick={ () => loadPostulacion( obj.id ) }
                                 className="bg-white dark:bg-slate-900 h-14 text-center py-3 px-4 border-b-2 border-gray-200 dark:border-slate-700 hover:bg-gray-300" 
                                 key={i}>
-                                    <td>{ obj.userReporting.email }</td>
+                                    <td>{ obj.reviewer.name + " " + obj.reviewer.lastName }</td>
                                     <td>{ new Date(obj.createdAt).toISOString().slice(0, 10) }</td>
                                 </tr>
                             ))
@@ -219,15 +218,27 @@ export default function CommentsReports() {
                                         </dd>
                                     </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Usuario reportado</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
+                                            { report.reviewer.name + " " + report.reviewer.lastName }
+                                        </dd>
+                                    </div>
+                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
                                         <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Comentario reportado</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
                                             { report.review.content }
                                         </dd>
                                     </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Calificación de comentario</dt>
+                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Perfil del tutor</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
-                                            { report.review.rating }
+                                            { report.tutor.name + " " + report.tutor.lastName }
+                                        </dd>
+                                    </div>
+                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Descripción del reporte</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
+                                            { report.description }
                                         </dd>
                                     </div>
                                     <div className="flex flex-row justify-around">
