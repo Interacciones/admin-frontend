@@ -1,8 +1,8 @@
 "use client";
 import Sidebar from "../sidebar/Sidebar";
 import Topbar from "../topbar/Topbar";
-import CommentsReports from "../login/reports/commentsReports";
-import TutorsReports from "../login/reports/tutorsReports";
+import CommentsReports from "./reports/commentsReports";
+import TutorsReports from "./reports/tutorsReports";
 import { useState, useEffect } from "react";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
