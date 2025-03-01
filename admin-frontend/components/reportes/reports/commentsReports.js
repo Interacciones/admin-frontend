@@ -58,20 +58,25 @@ export default function CommentsReports() {
     };
 
     const fetchUpdate = async (datoDinamico) => {
+        if (!report.userReporting || !report.reviewer) {
+            setOpen(true);
+            setMessage("No se ha seleccionado un reporte válido");
+            return;
+        }
+
         try {
-            const response = await fetch((`http://localhost:3000/reviewreports/update/${datoDinamico}`), {
+            const response = await fetch((`http://localhost:3000/reports/review/ignore`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
                 },
-                body: JSON.stringify(
-                    {
-                        reviewingAdminId: user.uid,
-                        text: "",
-                        action: "accept"
-                    }
-                )
+                body: JSON.stringify({
+                    reportedByUserId: report.userReporting.id,
+                    createdByUserId: report.reviewer.id,
+                    reportId: report.id,
+                    decisionArgument: "Se ignora el reporte"
+                })
             })
             const result = await response.json();
             if (result.message === "Successfull"){
@@ -87,20 +92,25 @@ export default function CommentsReports() {
     };
   
     const fetchDelete = async (datoDinamico) => {
+        if (!report.userReporting || !report.reviewer) {
+            setOpen(true);
+            setMessage("No se ha seleccionado un reporte válido");
+            return;
+        }
+
         try {
-            const response = await fetch((`http://localhost:3000/reviewreports/update/${datoDinamico}`), {
+            const response = await fetch((`http://localhost:3000/reports/review/eliminate`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
                 },
-                body: JSON.stringify(
-                    {
-                        reviewingAdminId: user.uid,
-                        text: "",
-                        action: "reject"
-                    }
-                )
+                body: JSON.stringify({
+                    reportedByUserId: report.userReporting.id,
+                    createdByUserId: report.reviewer.id,
+                    reportId: report.id,
+                    decisionArgument: "Se elimina el comentario"
+                })
             })
             const result = await response.json();
             if (result.message === "Successfull"){
@@ -246,13 +256,13 @@ export default function CommentsReports() {
                                         type="submit"
                                         onClick={() => fetchDelete(report.id)}
                                         className="bg-red-700 my-4 ml-4 w-32 h-12 text-white rounded-md shadow-lg hover:bg-green-300">
-                                            Eliminar
+                                            Eliminar comentario
                                         </button>
                                         <button
                                         type="submit"
                                         onClick={() => fetchUpdate(report.id)}
                                         className="bg-green-700 my-4 ml-4 w-32 h-12 text-white rounded-md shadow-lg hover:bg-green-300">
-                                            Eliminar comentario
+                                            Ignorar Reporte
                                         </button>
                                     </div>
                                 </dl>

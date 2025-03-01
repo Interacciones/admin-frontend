@@ -45,7 +45,7 @@ export default function CommentsReports() {
           },
         });
         const result = await response.json();
-        setData(result);
+        setData(result.data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -54,27 +54,47 @@ export default function CommentsReports() {
   
   const columns = [
       {
-          header: 'Tutor reportado',
-          accessorKey: "mail-reportado",
+          header: 'Usuario reportado',
+          accessorKey: "createdBy",
           sortable: true,
-          cell: ({ row }) => String(row.original.reportedUser.email),
+          cell: ({ row }) => (
+            <div>
+              <div>{row.original.createdBy.name} {row.original.createdBy.lastName}</div>
+              <div>{row.original.createdBy.email}</div>
+            </div>
+          ),
       },{
           header: 'Estudiante creador reporte',
-          accessorKey: "mail-que-reporta",
+          accessorKey: "reportedBy",
           sortable: true,
-          cell: ({ row }) => String(row.original.reportingUser.email),
+          cell: ({ row }) => (
+            <div>
+              <div>{row.original.reportedBy.name} {row.original.reportedBy.lastName}</div>
+              <div>{row.original.reportedBy.email}</div>
+            </div>
+          ),
       },{
-        header: 'Descripción',
-        accessorKey: "description",
+        header: 'Administrador que maneja',
+        accessorKey: "handlerAdmin",
         sortable: true,
-        cell: ({ row }) => String(row.original.commentText),
+        cell: ({ row }) => (
+          <div>
+            <div>{row.original.handlerAdmin.name} {row.original.handlerAdmin.lastName}</div>
+            <div>{row.original.handlerAdmin.email}</div>
+          </div>
+        ),
       },{
         header: 'Fecha creación',
-        accessorKey: "date",
+        accessorKey: "createdAt",
         sortable: true,
         cell: ({ row }) => String(new Date(row.original.createdAt).toISOString().slice(0, 10)),
       },{
         header: 'Decisión',
+        accessorKey: "decisionArgument",
+        sortable: true,
+        cell: ({ row }) => String(row.original.decisionArgument),
+      },{
+        header: 'Estado',
         accessorKey: "status",
         sortable: true,
         cell: ({ row }) => String(row.original.status),
@@ -110,39 +130,41 @@ export default function CommentsReports() {
               placeholder="Filtro"
             />
           </div>
-          <table className='min-w-full'>
-            <thead className='border-b-gray-800 border-b-2 font-sans'>
-              {table.getHeaderGroups().map(HeaderGroup => (
-                <tr key={HeaderGroup.id} className='text-slate-700 dark:text-slate-400 text-center'>
-                  {HeaderGroup.headers.map(header => (
-                    <th key={header.id} onClick={header.column.getToggleSortingHandler()} className="py-3 px-4 font-semibold text-sm cursor-pointer">
-                      {flexRender(header.column.columnDef.header, header.getContext())}
-                      {header.column.getCanSort() && ({
-                        asc: <ArrowDownIcon className='h-4 inline' />,
-                        desc: <ArrowUpIcon className='h-4 inline' />
-                      }[header.column.getIsSorted()] ??
-                        <ArrowsUpDownIcon className='h-4 inline' />
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              ))}
-            </thead>
-            <tbody className='text-slate-700 dark:text-slate-400 border-gray-100 dark:border-slate-700 border-b-2 font-sans'>
-              {table.getRowModel().rows.map(row => (
-                <tr key={row.id} className="text-center border-gray-100 dark:border-slate-700 border-b-2">
-                  {row.getVisibleCells().map(cell => (
-                    <td key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          <div className="overflow-x-auto">
+            <table className='min-w-full'>
+              <thead className='border-b-gray-800 border-b-2 font-sans'>
+                {table.getHeaderGroups().map(HeaderGroup => (
+                  <tr key={HeaderGroup.id} className='text-slate-700 dark:text-slate-400 text-center'>
+                    {HeaderGroup.headers.map(header => (
+                      <th key={header.id} onClick={header.column.getToggleSortingHandler()} className="py-3 px-4 font-semibold text-sm cursor-pointer">
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {header.column.getCanSort() && ({
+                          asc: <ArrowDownIcon className='h-4 inline' />,
+                          desc: <ArrowUpIcon className='h-4 inline' />
+                        }[header.column.getIsSorted()] ??
+                          <ArrowsUpDownIcon className='h-4 inline' />
+                        )}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody className='text-slate-700 dark:text-slate-400 border-gray-100 dark:border-slate-700 border-b-2 font-sans'>
+                {table.getRowModel().rows.map(row => (
+                  <tr key={row.id} className="text-center border-gray-100 dark:border-slate-700 border-b-2">
+                    {row.getVisibleCells().map(cell => (
+                      <td key={cell.id} className="py-3 px-4">
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </main>
     </div>

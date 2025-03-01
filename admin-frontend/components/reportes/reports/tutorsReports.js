@@ -59,12 +59,18 @@ export default function TutorsReports() {
 
     const fetchUpdate = async (datoDinamico) => {
         try {
-            const response = await fetch((`http://localhost:3000/admin-reports/update/${datoDinamico}`), {
+            const response = await fetch((`http://localhost:3000/reports/tutor/ignore`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
-                }
+                },
+                body: JSON.stringify({
+                    reportedByUserId: report.userReporting.id,
+                    createdByUserId: report.tutor.id,
+                    reportId: report.id,
+                    decisionArgument: "Se ignora el reporte"
+                })
             })
             const result = await response.json();
             if (result.message === "Successfull"){
@@ -81,12 +87,18 @@ export default function TutorsReports() {
   
     const fetchDelete = async (datoDinamico) => {
         try {
-            const response = await fetch((`http://localhost:3000/admin-reports/delete/${datoDinamico}`), {
-                method: 'DELETE',
+            const response = await fetch((`http://localhost:3000/reports/tutor/eliminate`), {
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
-                }
+                },
+                body: JSON.stringify({
+                    reportedByUserId: report.userReporting.id,
+                    createdByUserId: report.tutor.id,
+                    reportId: report.id,
+                    decisionArgument: "Se elimina el tutor"
+                })
             })
             const result = await response.json();
             if (result.message === "Successfull"){
@@ -232,13 +244,13 @@ export default function TutorsReports() {
                                         type="submit"
                                         onClick={() => fetchDelete(report.id)}
                                         className="bg-red-700 my-4 ml-4 w-32 h-12 text-white rounded-md shadow-lg hover:bg-green-300">
-                                            Eliminar
+                                            Banear perfil tutor
                                         </button>
                                         <button
                                         type="submit"
                                         onClick={() => fetchUpdate(report.id)}
                                         className="bg-green-700 my-4 ml-4 w-32 h-12 text-white rounded-md shadow-lg hover:bg-green-300">
-                                            Banear tutor
+                                            Ignorar Reporte
                                         </button>
                                     </div>
                                 </dl>
