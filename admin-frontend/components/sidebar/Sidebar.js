@@ -27,6 +27,10 @@ export default function Sidebar() {
                 <WindowIcon className="h-5 w-5"/>
                 <Link href="/historial" className="ml-2">Historial Reportes</Link>
             </dt>
+            <dt className="flex">
+                <EnvelopeIcon className="h-5 w-5"/>
+                <Link href="/reclamos" className="ml-2">Reclamos</Link>
+            </dt>
             {/* <dt className="flex">
                 <ChartBarIcon className="h-5 w-5"/>
                 <Link href="#" className="ml-2">Estadísticas</Link>
