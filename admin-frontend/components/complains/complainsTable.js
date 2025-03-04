@@ -9,15 +9,16 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import { UserAuth } from '../../context/AuthContext';
+import { UserAuth } from '../context/AuthContext';
 
-export default function TutorsReports() {
-    const [reports, setReports] = useState([]);
-    const [report, setReport] = useState({});
+export default function ComplainsTable() {
+    const [complains, setComplains] = useState([]);
+    const [complain, setComplain] = useState({});
     const [sortOrder, setSortOrder] = useState(null);
     const [sortDirection, setSortDirection] = useState('asc');
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
+    const [content, setContent] = useState("");
     const { user } = UserAuth();
     
     const handleClose = () => {
@@ -34,10 +35,10 @@ export default function TutorsReports() {
     }
 
     const sortedData = () => {
-        let sorted = [...reports];
+        let sorted = [...complains];
         switch (sortOrder) {
             case 'name':
-                sorted.sort((a, b) => a.tutor.name.localeCompare(b.tutor.name));
+                sorted.sort((a, b) => a.name.localeCompare(b.name));
                 break;
             case 'dateStart':
                 if(sortDirection === 'asc') {
@@ -47,7 +48,7 @@ export default function TutorsReports() {
                 }
                 break;
             default:
-                return reports;
+                return complains;
         }
         
         if (sortDirection === 'desc') {
@@ -57,69 +58,74 @@ export default function TutorsReports() {
         return sorted;
     };
 
-    const fetchUpdate = async (datoDinamico) => {
+    const fetchUpdate = async (id) => {
+        if (!complain.name || !complain.email) {
+            setOpen(true);
+            setMessage("No se ha seleccionado una queja válida");
+            return;
+        }
+
         try {
-            const response = await fetch((`http://localhost:3000/reports/tutor/ignore`), {
+            const response = await fetch((`http://localhost:3000/admin/complains/${id}`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
                 },
                 body: JSON.stringify({
-                    reportedByUserId: report.userReporting.id,
-                    createdByUserId: report.tutor.id,
-                    reportId: report.id,
-                    decisionArgument: "Se ignora el reporte"
+                    content: content,
+                    name: complain.name,
+                    lastName: complain.lastName,
+                    email: complain.email
                 })
-            })
-            const result = await response.json();
-            if (response.status === 200){
-                fetchReportes();
-                setReport({});
-                setMessage("Reporte ignorado con éxito");
+            });
+            if (response.status === 200) {
+                fetchComplains();
+                setComplain({});
+                setContent("");
+                setMessage("Mensaje manejado con éxito");
                 setOpen(true);
             } else {
                 setOpen(true);
-                setMessage("Problema al actualizar reporte");
+                setMessage("Problema al actualizar queja");
             }
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
   
-    const fetchDelete = async (datoDinamico) => {
+    const fetchDelete = async (id) => {
+        if (!complain.name || !complain.email) {
+            setOpen(true);
+            setMessage("No se ha seleccionado una queja válida");
+            return;
+        }
+
         try {
-            const response = await fetch((`http://localhost:3000/reports/tutor/eliminate`), {
-                method: 'PATCH',
+            const response = await fetch((`http://localhost:3000/admin/complains/${id}`), {
+                method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${user.stsTokenManager.accessToken}`
-                },
-                body: JSON.stringify({
-                    reportedByUserId: report.userReporting.id,
-                    createdByUserId: report.tutor.id,
-                    reportId: report.id,
-                    decisionArgument: "Se elimina el tutor"
-                })
-            })
-            const result = await response.json();
-            if (response.status === 200){
-                fetchReportes();
-                setReport({});
-                setMessage("Reporte eliminado con éxito");
+                }
+            });
+            if (response.status === 200) {
+                fetchComplains();
+                setComplain({});
+                setMessage("Reclamo eliminado con éxito");
                 setOpen(true);
             } else {
                 setOpen(true);
-                setMessage("Problema al eliminar reporte");
+                setMessage("Problema al eliminar queja");
             }
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
 
-    const fetchReportes = async () => {
+    const fetchComplains = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/reports/tutor`, {
+            const response = await fetch(`http://localhost:3000/admin/complains`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -127,19 +133,19 @@ export default function TutorsReports() {
                 }
             });
             const result = await response.json();
-            setReports(result.data);
+            setComplains(result.data);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
     };
     
-    const loadPostulacion = (id) => {
-        const found = reports.find(obj => obj.id == id);
-        setReport(found);
+    const loadComplain = (id) => {
+        const found = complains.find(obj => obj.id == id);
+        setComplain(found);
     };
 
     useEffect(() => {
-        fetchReportes();
+        fetchComplains();
     }, []);
         
     return(
@@ -163,7 +169,7 @@ export default function TutorsReports() {
                                 onClick={() => toggleSortOrder('name')}
                             >
                                 <div className="flex items-center justify-center">
-                                    <span className="px-2 text-slate-700 dark:text-slate-400">Tutor reportado</span>
+                                    <span className="px-2 text-slate-700 dark:text-slate-400">Nombre</span>
                                     {sortOrder === 'name' && sortDirection === 'asc' && (
                                     <ArrowUpIcon className="h-4 w-4" aria-hidden="true" />
                                     )}
@@ -189,14 +195,14 @@ export default function TutorsReports() {
                         </tr>
                     </thead>
                     <tbody className='text-slate-700 dark:text-slate-400 text-sm'>
-                        {reports.length?(
+                        {complains.length?(
                             sortedData().map((obj, i) => (
                                 <tr
                                 value = { obj.id } 
-                                onClick={ () => loadPostulacion( obj.id ) }
+                                onClick={ () => loadComplain( obj.id ) }
                                 className="bg-white dark:bg-slate-900 h-14 text-center py-3 px-4 border-b-2 border-gray-200 dark:border-slate-700 hover:bg-gray-300" 
                                 key={i}>
-                                    <td>{ obj.tutor.name + " " + obj.tutor.lastName }</td>
+                                    <td>{ obj.name + " " + obj.lastName }</td>
                                     <td>{ new Date(obj.createdAt).toISOString().slice(0, 10) }</td>
                                 </tr>
                             ))
@@ -204,57 +210,50 @@ export default function TutorsReports() {
                             <tr className="bg-white dark:bg-slate-900 h-14 text-center py-3 px-4 border-b-2 border-gray-200 dark:border-slate-700 hover:bg-gray-300" key={0}>
                                 <td>no data</td>
                                 <td>no data</td>
-                            </tr> 
+                            </tr>
                         )}
                     </tbody>
                 </table>
                 <div className="mx-4 w-1/2">
-                    {report.id ? (
+                    {complain.id ? (
                         <div className="bg-white dark:bg-slate-900 justify-center border-t border-gray-100 dark:border-slate-700">
-                                <h2 className="text-2xl mt-2">Reporte a {report.tutor.name + " " + report.tutor.lastName}</h2>
+                                <h2 className="text-2xl mt-2">Queja de {complain.name + " " + complain.lastName}</h2>
                                 <dl className="divide-y divide-gray-300 dark:divide-slate-700">
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Mail tutor</dt>
+                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Correo</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
-                                            { report.tutor.email }
+                                            { complain.email }
                                         </dd>
                                     </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Mail creador reporte</dt>
+                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Contenido</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
-                                            { report.userReporting.email }
+                                            { complain.content }
                                         </dd>
                                     </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Nombre creador reporte</dt>
+                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Mensaje de respuesta</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
-                                            { report.userReporting.name + " " + report.userReporting.lastName }
-                                        </dd>
-                                    </div>
-                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Descripción del reporte</dt>
-                                        <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
-                                            { report.description }
-                                        </dd>
-                                    </div>
-                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Foto del tutor</dt>
-                                        <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 w-40 sm:col-span-2 sm:mt-0">
-                                            <img src={report.tutor.photo} alt="Foto del tutor"></img>
+                                            <textarea
+                                                value={content}
+                                                onChange={(e) => setContent(e.target.value)}
+                                                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                                placeholder="(En caso de manejar queja, escriba aquí su respuesta)"
+                                            />
                                         </dd>
                                     </div>
                                     <div className="flex flex-row justify-around">
                                         <button
                                         type="submit"
-                                        onClick={() => fetchDelete(report.id)}
+                                        onClick={() => fetchDelete(complain.id)}
                                         className="bg-red-700 my-4 ml-4 w-32 h-12 text-white rounded-md shadow-lg hover:bg-green-300">
-                                            Banear perfil tutor
+                                            Eliminar queja
                                         </button>
                                         <button
                                         type="submit"
-                                        onClick={() => fetchUpdate(report.id)}
+                                        onClick={() => fetchUpdate(complain.id)}
                                         className="bg-green-700 my-4 ml-4 w-32 h-12 text-white rounded-md shadow-lg hover:bg-green-300">
-                                            Ignorar Reporte
+                                            Manejar queja
                                         </button>
                                     </div>
                                 </dl>
@@ -262,7 +261,7 @@ export default function TutorsReports() {
                     ):(
                         <div className="bg-white justify-center border-t border-gray-100 dark:bg-slate-900 dark:border-slate-700">
                             <div className="grid grid-cols-3 grid-rows-5">
-                                <h3 className="row-start-3 col-start-2 text-2xl text-slate-700 dark:text-slate-400">Seleccione un reporte</h3>
+                                <h3 className="row-start-3 col-start-2 text-2xl text-slate-700 dark:text-slate-400">Seleccione una queja</h3>
                             </div>
                         </div>
                     )}
