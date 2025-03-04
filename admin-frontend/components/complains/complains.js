@@ -33,7 +33,7 @@ export default function Complains() {
       }
     });
     const result = await response.json();
-    if (result.message === "Successfull") {
+    if (response.status === 200) {
       setAuthorized(true);
     } else {
       setOpen(true);

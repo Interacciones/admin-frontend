@@ -36,7 +36,7 @@ export default function Historial() {
       }
     });
     const result = await response.json();
-    if (result.message === "Successfull") {
+    if (response.status === 200) {
       setAuthorized(true);
     } else {
       setError(true);

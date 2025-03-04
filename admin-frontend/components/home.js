@@ -34,7 +34,7 @@ export default function Admin() {
     });
     console.log(currentUser)
     const result = await response.json();
-    if (result.message === "Successfull") {
+    if (response.status === 200) {
       setAuthorized(true);
     } else {
       setOpen(true);

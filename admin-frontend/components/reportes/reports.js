@@ -36,7 +36,7 @@ export default function Reportes() {
       }
     });
     const result = await response.json();
-    if (result.message === "Successfull") {
+    if (response.status === 200) {
       setAuthorized(true);
     } else {
       setOpen(true);

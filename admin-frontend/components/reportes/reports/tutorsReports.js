@@ -73,7 +73,7 @@ export default function TutorsReports() {
                 })
             })
             const result = await response.json();
-            if (result.message === "Successfull"){
+            if (response.status === 200){
                 fetchReportes();
                 setReport({});
             } else {
@@ -101,7 +101,7 @@ export default function TutorsReports() {
                 })
             })
             const result = await response.json();
-            if (result.message === "Successfull"){
+            if (response.status === 200){
                 fetchReportes();
                 setReport({});
             } else {

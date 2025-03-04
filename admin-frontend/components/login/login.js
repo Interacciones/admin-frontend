@@ -41,7 +41,7 @@ function Login() {
         }
       });
       const result = await response.json();
-      if (result.message === "Successfull") {
+      if (response.status === 200) {
         setRedirectUser(true)
       } else {
         setMessage("Las credenciales no son correctas");
