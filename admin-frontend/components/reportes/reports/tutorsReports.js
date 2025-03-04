@@ -76,6 +76,8 @@ export default function TutorsReports() {
             if (response.status === 200){
                 fetchReportes();
                 setReport({});
+                setMessage("Reporte ignorado con éxito");
+                setOpen(true);
             } else {
                 setOpen(true);
                 setMessage("Problema al actualizar reporte");
@@ -104,6 +106,8 @@ export default function TutorsReports() {
             if (response.status === 200){
                 fetchReportes();
                 setReport({});
+                setMessage("Reporte eliminado con éxito");
+                setOpen(true);
             } else {
                 setOpen(true);
                 setMessage("Problema al eliminar reporte");

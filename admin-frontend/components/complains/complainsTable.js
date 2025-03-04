@@ -83,6 +83,8 @@ export default function ComplainsTable() {
                 fetchComplains();
                 setComplain({});
                 setContent("");
+                setMessage("Mensaje manejado con éxito");
+                setOpen(true);
             } else {
                 setOpen(true);
                 setMessage("Problema al actualizar queja");
@@ -110,6 +112,8 @@ export default function ComplainsTable() {
             if (response.status === 200) {
                 fetchComplains();
                 setComplain({});
+                setMessage("Reclamo eliminado con éxito");
+                setOpen(true);
             } else {
                 setOpen(true);
                 setMessage("Problema al eliminar queja");
@@ -234,7 +238,7 @@ export default function ComplainsTable() {
                                                 value={content}
                                                 onChange={(e) => setContent(e.target.value)}
                                                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                                placeholder="(En casao de manejar queja, escriba aquí su respuesta)"
+                                                placeholder="(En caso de manejar queja, escriba aquí su respuesta)"
                                             />
                                         </dd>
                                     </div>
