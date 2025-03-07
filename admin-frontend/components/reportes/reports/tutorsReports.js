@@ -18,6 +18,7 @@ export default function TutorsReports() {
     const [sortDirection, setSortDirection] = useState('asc');
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
+    const [reasoning, setReasoning] = useState(""); // Nuevo estado para el cuadro de texto
     const { user } = UserAuth();
     
     const handleClose = () => {
@@ -69,7 +70,7 @@ export default function TutorsReports() {
                     reportedByUserId: report.userReporting.id,
                     createdByUserId: report.tutor.id,
                     reportId: report.id,
-                    decisionArgument: "Se ignora el reporte"
+                    decisionArgument: reasoning
                 })
             })
             const result = await response.json();
@@ -99,7 +100,7 @@ export default function TutorsReports() {
                     reportedByUserId: report.userReporting.id,
                     createdByUserId: report.tutor.id,
                     reportId: report.id,
-                    decisionArgument: "Se elimina el tutor"
+                    decisionArgument: reasoning
                 })
             })
             const result = await response.json();
@@ -241,6 +242,16 @@ export default function TutorsReports() {
                                         <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Foto del tutor</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 w-40 sm:col-span-2 sm:mt-0">
                                             <img src={report.tutor.photo} alt="Foto del tutor"></img>
+                                        </dd>
+                                    </div>
+                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Razón decisión:</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
+                                            <textarea
+                                                value={reasoning}
+                                                onChange={(e) => setReasoning(e.target.value)}
+                                                className="w-full h-24 p-2 border border-gray-300 dark:border-slate-700 rounded-md"
+                                            />
                                         </dd>
                                     </div>
                                     <div className="flex flex-row justify-around">

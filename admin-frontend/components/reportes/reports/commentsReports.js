@@ -18,6 +18,7 @@ export default function CommentsReports() {
     const [sortDirection, setSortDirection] = useState('asc');
     const [open, setOpen] = useState(false);
     const [message, setMessage] = useState("");
+    const [reasoning, setReasoning] = useState(""); // Nuevo estado para el cuadro de texto
     const { user } = UserAuth();
     
     const handleClose = () => {
@@ -75,7 +76,7 @@ export default function CommentsReports() {
                     reportedByUserId: report.userReporting.id,
                     createdByUserId: report.reviewer.id,
                     reportId: report.id,
-                    decisionArgument: "Se ignora el reporte"
+                    decisionArgument: reasoning
                 })
             })
             const result = await response.json();
@@ -111,7 +112,7 @@ export default function CommentsReports() {
                     reportedByUserId: report.userReporting.id,
                     createdByUserId: report.reviewer.id,
                     reportId: report.id,
-                    decisionArgument: "Se elimina el comentario"
+                    decisionArgument: reasoning
                 })
             })
             const result = await response.json();
@@ -253,6 +254,16 @@ export default function CommentsReports() {
                                         <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Descripción del reporte</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
                                             { report.description }
+                                        </dd>
+                                    </div>
+                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Razón para eliminar</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
+                                            <textarea
+                                                value={reasoning}
+                                                onChange={(e) => setReasoning(e.target.value)}
+                                                className="w-full h-24 p-2 border border-gray-300 dark:border-slate-700 rounded-md"
+                                            />
                                         </dd>
                                     </div>
                                     <div className="flex flex-row justify-around">
