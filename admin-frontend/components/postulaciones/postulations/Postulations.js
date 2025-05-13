@@ -48,7 +48,7 @@ export default function Postulations() {
 
     const fetchYes = async (datoDinamico) => {
         try {
-            const response = await fetch((`http://localhost:3000/tutors/accept/${datoDinamico}`), {
+            const response = await fetch((`https://www.interaccionesuni.com/tutors/accept/${datoDinamico}`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ export default function Postulations() {
     
     const fetchNo = async (datoDinamico) => {
         try {
-            const response = await fetch((`http://localhost:3000/tutors/reject/${datoDinamico}`), {
+            const response = await fetch((`https://www.interaccionesuni.com/tutors/reject/${datoDinamico}`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export default function Postulations() {
 
     const fetchPostulaciones = async () => {
         try {
-            const response = await fetch((`http://localhost:3000/unaccepted-tutors`), {
+            const response = await fetch((`https://www.interaccionesuni.com/unaccepted-tutors`), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -192,6 +192,12 @@ export default function Postulations() {
                                         <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Descripción</dt>
                                         <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
                                             { postulation.description }
+                                        </dd>
+                                    </div>
+                                    <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                                        <dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Precio</dt>
+                                        <dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
+                                            { postulation.priceDescription }
                                         </dd>
                                     </div>
                                     <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">

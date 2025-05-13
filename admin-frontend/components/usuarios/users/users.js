@@ -40,7 +40,7 @@ useEffect(() => {
 
 const fetchProfiles = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/users`, {
+      const response = await fetch(`https://www.interaccionesuni.com/users`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -95,8 +95,8 @@ const confirmAction = async () => {
 
     if ((actionType === 'banear' && !isBlocked) || (actionType === 'desbanear' && isBlocked)) {
       const actionUrl = actionType === 'banear'
-      ? `http://localhost:3000/users/ban/${selectedUser.id}`
-      : `http://localhost:3000/users/unban/${selectedUser.id}`;
+      ? `https://www.interaccionesuni.com/users/ban/${selectedUser.id}`
+      : `https://www.interaccionesuni.com/users/unban/${selectedUser.id}`;
 
       // Enviar la solicitud al backend
       await fetch(actionUrl, {

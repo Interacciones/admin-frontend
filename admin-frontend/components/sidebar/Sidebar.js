@@ -1,5 +1,5 @@
 import { LineStyle, Timeline } from "@mui/icons-material";
-import { UserIcon, ChartBarIcon, ClipboardDocumentListIcon, DocumentChartBarIcon, WindowIcon, EnvelopeIcon, ExclamationCircleIcon, Cog6ToothIcon, UserGroupIcon, ChatBubbleLeftEllipsisIcon, ArrowTrendingUpIcon, ReceiptPercentIcon, NoSymbolIcon, HomeIcon, UsersIcon, BuildingLibraryIcon } from '@heroicons/react/24/outline'
+import { UserIcon, ChartBarIcon, ClipboardDocumentListIcon, DocumentChartBarIcon, WindowIcon, EnvelopeIcon, ExclamationCircleIcon, Cog6ToothIcon, UserGroupIcon, ChatBubbleLeftEllipsisIcon, ArrowTrendingUpIcon, ReceiptPercentIcon, NoSymbolIcon, HomeIcon, UsersIcon, BuildingLibraryIcon, BookOpenIcon } from '@heroicons/react/24/outline'
 import Link from 'next/link';
 
 export default function Sidebar() {
@@ -18,6 +18,10 @@ export default function Sidebar() {
             <dt className="flex">
                 <UserIcon className="h-5 w-5"/>
                 <Link href="/usuarios" className="ml-2">Usuarios</Link>
+            </dt>
+            <dt className="flex">
+                <BookOpenIcon className="h-5 w-5"/>
+                <Link href="/areas" className="ml-2">Áreas de estudio</Link>
             </dt>
             <dt className="flex">
                 <ExclamationCircleIcon className="h-5 w-5"/>

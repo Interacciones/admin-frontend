@@ -1,19 +1,19 @@
 "use client";
-import Sidebar from "./sidebar/Sidebar";
-import Topbar from "./topbar/Topbar";
-import FeaturedInfo from "./featuredInfo/FeaturedInfo";
+import AreasComponent from "./areas/Areas";
+import Sidebar from "../sidebar/Sidebar";
+import Topbar from "../topbar/Topbar";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "./firebase";
+import { auth } from "../firebase";
 import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
-import RouteLoader from "../components/RouteLoader";
+import RouteLoader from "../RouteLoader";
 
-export default function Admin() {
+export default function Areas() {
   const [open, setOpen] = useState(false);
   const [redirectUser, setRedirectUser] = useState(false);
   const [authorized, setAuthorized] = useState(false);
@@ -32,7 +32,6 @@ export default function Admin() {
         'Authorization': `Bearer ${currentUser.stsTokenManager.accessToken}`
       }
     });
-    console.log(currentUser)
     const result = await response.json();
     if (response.status === 200) {
       setAuthorized(true);
@@ -49,37 +48,36 @@ export default function Admin() {
         checkAdmin(currentUser);
       }
     });
-  }, []);
+  }, [])
 
-  useEffect(() => {
-    if (redirectUser) {
-      router.push('/login');
-    }
-  }, [redirectUser]);
-
+  if (redirectUser) {
+    router.push('/login');
+  }
+  
   return (
     <>
       <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" >
           <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                  No tienes permisos para acceder a esta página
+                No tienes permisos para acceder a esta página
               </DialogContentText>
           </DialogContent>
           <DialogActions>
               <Button onClick={handleClose}>Cerrar</Button>
           </DialogActions>
       </Dialog>
+      
       {authorized ? (
-      <div className="bg-white min-w-screen min-h-screen flex flex-col">
+        <div className="bg-white dark:bg-slate-900 min-w-screen min-h-screen flex flex-col">
           <Topbar/>
           <div className="flex flex-grow">
             <Sidebar/>
-            <FeaturedInfo/>
+            <AreasComponent/>
           </div>
-      </div>
+        </div>
       ) : (
         <RouteLoader/>
       )}
     </>
-  );
+  )
 }
