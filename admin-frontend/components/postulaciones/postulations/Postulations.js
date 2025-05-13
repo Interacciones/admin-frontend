@@ -48,7 +48,7 @@ export default function Postulations() {
 
     const fetchYes = async (datoDinamico) => {
         try {
-            const response = await fetch((`https://www.interaccionesuni.com/tutors/accept/${datoDinamico}`), {
+            const response = await fetch((`http://localhost:3000/tutors/accept/${datoDinamico}`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ export default function Postulations() {
     
     const fetchNo = async (datoDinamico) => {
         try {
-            const response = await fetch((`https://www.interaccionesuni.com/tutors/reject/${datoDinamico}`), {
+            const response = await fetch((`http://localhost:3000/tutors/reject/${datoDinamico}`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -82,7 +82,7 @@ export default function Postulations() {
 
     const fetchPostulaciones = async () => {
         try {
-            const response = await fetch((`https://www.interaccionesuni.com/unaccepted-tutors`), {
+            const response = await fetch((`http://localhost:3000/unaccepted-tutors`), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

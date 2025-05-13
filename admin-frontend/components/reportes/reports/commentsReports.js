@@ -66,7 +66,7 @@ export default function CommentsReports() {
         }
 
         try {
-            const response = await fetch((`https://www.interaccionesuni.com/reports/review/ignore`), {
+            const response = await fetch((`http://localhost:3000/reports/review/ignore`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ export default function CommentsReports() {
         }
 
         try {
-            const response = await fetch((`https://www.interaccionesuni.com/reports/review/eliminate`), {
+            const response = await fetch((`http://localhost:3000/reports/review/eliminate`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ export default function CommentsReports() {
 
     const fetchReportes = async () => {
         try {
-            const response = await fetch(`https://www.interaccionesuni.com/reports/review`, {
+            const response = await fetch(`http://localhost:3000/reports/review`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
