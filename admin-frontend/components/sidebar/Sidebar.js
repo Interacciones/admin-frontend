@@ -16,6 +16,10 @@ export default function Sidebar() {
                   <Link href="/postulaciones" className="ml-2"> Postulaciones </Link>
             </dt>
             <dt className="flex">
+                <UsersIcon className="h-5 w-5"/>
+                  <Link href="/postulaciones-emprendimientos" className="ml-2"> Post. Emprendimientos </Link>
+            </dt>
+            <dt className="flex">
                 <UserIcon className="h-5 w-5"/>
                 <Link href="/usuarios" className="ml-2">Usuarios</Link>
             </dt>
@@ -28,8 +32,16 @@ export default function Sidebar() {
                 <Link href="/reportes" className="ml-2">Reportes</Link>
             </dt>
             <dt className="flex">
+                <ExclamationCircleIcon className="h-5 w-5"/>
+                <Link href="/reportes-emprendimientos" className="ml-2">Reportes Emprend.</Link>
+            </dt>
+            <dt className="flex">
                 <WindowIcon className="h-5 w-5"/>
                 <Link href="/historial" className="ml-2">Historial Reportes</Link>
+            </dt>
+            <dt className="flex">
+                <WindowIcon className="h-5 w-5"/>
+                <Link href="/historial-emprendimientos" className="ml-2">Historial Emprend.</Link>
             </dt>
             <dt className="flex">
                 <EnvelopeIcon className="h-5 w-5"/>

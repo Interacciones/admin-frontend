@@ -1,5 +1,5 @@
 "use client";
-import AreasComponent from "./areas/Areas";
+import EntrepreneurPostulations from "./entrepreneur/EntrepreneurPostulations";
 import Sidebar from "../sidebar/Sidebar";
 import Topbar from "../topbar/Topbar";
 import Button from '@mui/material/Button';
@@ -13,7 +13,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import RouteLoader from "../RouteLoader";
 
-export default function Areas() {
+export default function PostulacionesEmprendimientos() {
   const [open, setOpen] = useState(false);
   const [redirectUser, setRedirectUser] = useState(false);
   const [authorized, setAuthorized] = useState(false);
@@ -53,7 +53,6 @@ export default function Areas() {
   if (redirectUser) {
     router.push('/login');
   }
-  
   return (
     <>
       <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" >
@@ -68,11 +67,11 @@ export default function Areas() {
       </Dialog>
       
       {authorized ? (
-        <div className="bg-white dark:bg-slate-900 min-w-screen min-h-screen flex flex-col">
+        <div className="bg-white min-w-screen min-h-screen flex flex-col">
           <Topbar/>
           <div className="flex flex-grow">
             <Sidebar/>
-            <AreasComponent/>
+            <EntrepreneurPostulations/>
           </div>
         </div>
       ) : (
@@ -81,3 +80,10 @@ export default function Areas() {
     </>
   )
 }
+
+
+
+
+
+
+
