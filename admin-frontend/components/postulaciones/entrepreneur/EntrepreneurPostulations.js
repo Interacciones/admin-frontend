@@ -28,11 +28,12 @@ export default function EntrepreneurPostulations() {
 			case 'name':
 				sorted.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
 				break;
-			case 'userId':
+			case 'userName':
+				const getUserName = (p) => ((p.user?.name || '') + ' ' + (p.user?.lastName || '')).trim();
 				if(sortDirection === 'asc') {
-					sorted.sort((a, b) => (a.userId || 0) - (b.userId || 0));
+					sorted.sort((a, b) => getUserName(a).localeCompare(getUserName(b)));
 				} else {
-					sorted.sort((a, b) => (b.userId || 0) - (a.userId || 0));
+					sorted.sort((a, b) => getUserName(b).localeCompare(getUserName(a)));
 				}
 				break;
 			default:
@@ -94,6 +95,19 @@ export default function EntrepreneurPostulations() {
 		}
 	};
 
+	const normalizePhotoUrl = (photo) => {
+		if (!photo) return '';
+		try {
+			if (/^https?:\/\//i.test(photo)) {
+				return encodeURI(photo);
+			}
+			const base = process.env.NEXT_PUBLIC_ENTREPRENEUR_S3_BASE_URL || 'https://s3.us-east-1.amazonaws.com/interacciones.entrepreneurs/';
+			return base + encodeURIComponent(photo);
+		} catch (_) {
+			return photo;
+		}
+	};
+
 	const loadProject = (id) => {
 		const found = projects.find(obj => obj.id == id);
 		setProject(found || {});
@@ -114,28 +128,28 @@ export default function EntrepreneurPostulations() {
 						<tr className="text-black dark:text-white text-left text-sm">
 							<th 
 								className="py-3 px-4 font-semibold text-sm cursor-pointer"
-								onClick={() => toggleSortOrder('name')}
+								onClick={() => toggleSortOrder('userName')}
 							>
 								<div className="flex items-center justify-center">
 									<span className="px-2 text-slate-700 dark:text-slate-400">Usuario</span>
-									{sortOrder === 'name' && sortDirection === 'asc' && (
+									{sortOrder === 'userName' && sortDirection === 'asc' && (
 									<ArrowUpIcon className="h-4 w-4" aria-hidden="true" />
 									)}
-									{sortOrder === 'name' && sortDirection === 'desc' && (
+									{sortOrder === 'userName' && sortDirection === 'desc' && (
 									<ArrowDownIcon className="h-4 w-4" aria-hidden="true" />
 									)}
 								</div>
 							</th>
 							<th 
 								className="py-3 px-4 font-semibold text-sm cursor-pointer"
-								onClick={() => toggleSortOrder('userId')}
+								onClick={() => toggleSortOrder('name')}
 							>
 								<div className="flex items-center justify-center">
-									<span className="px-2 text-slate-700 dark:text-slate-400">Usuario ID</span>
-									{sortOrder === 'userId' && sortDirection === 'asc' && (
+									<span className="px-2 text-slate-700 dark:text-slate-400">Proyecto</span>
+									{sortOrder === 'name' && sortDirection === 'asc' && (
 									<ArrowUpIcon className="h-4 w-4" aria-hidden="true" />
 									)}
-									{sortOrder === 'userId' && sortDirection === 'desc' && (
+									{sortOrder === 'name' && sortDirection === 'desc' && (
 									<ArrowDownIcon className="h-4 w-4" aria-hidden="true" />
 									)}
 								</div>
@@ -150,8 +164,8 @@ export default function EntrepreneurPostulations() {
 								onClick={ () => loadProject( obj.id ) }
 								className="bg-white dark:bg-slate-900 h-14 text-center py-3 px-4 border-b-2 border-gray-200 dark:border-slate-700 hover:bg-gray-300" 
 								key={i}>
+									<td>{ ((obj.user?.name || '') + ' ' + (obj.user?.lastName || '')).trim() }</td>
 									<td>{ obj.name }</td>
-									<td>{ obj.userId }</td>
 								</tr>
 							))
 						):(
@@ -169,15 +183,43 @@ export default function EntrepreneurPostulations() {
 								<h2 className="text-2xl">Proyecto {project.name}</h2>
 								<dl className="divide-y divide-gray-300 dark:divide-slate-700">
 									<div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-										<dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Usuario ID</dt>
+										<dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Correo usuario</dt>
 										<dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
-											{ project.userId }
+											{ project.user?.email }
+										</dd>
+									</div>
+									<div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+										<dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Nombre usuario</dt>
+										<dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
+											{ project.user ? (project.user.name + " " + (project.user.lastName || '')) : '' }
 										</dd>
 									</div>
 									<div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
 										<dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Activo</dt>
 										<dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
 											{ String(project.isActive) }
+										</dd>
+									</div>
+									<div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+										<dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Instagram</dt>
+										<dd className="mt-1 text-sm leading-6 text-blue-600 sm:col-span-2 sm:mt-0">
+											{ project.instagramProfile ? (
+												<a href={project.instagramProfile.startsWith('http') ? project.instagramProfile : `https://instagram.com/${project.instagramProfile.replace('@','')}`} target="_blank" rel="noreferrer" className="underline">
+													{ project.instagramProfile }
+												</a>
+											) : '—' }
+										</dd>
+									</div>
+									<div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+										<dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Mostrar contacto</dt>
+										<dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
+											{ project.showContact ? 'Sí' : 'No' }
+										</dd>
+									</div>
+									<div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+										<dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Categorías</dt>
+										<dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 sm:col-span-2 sm:mt-0">
+											{ (project.categories || []).length ? project.categories.map((c) => c.name).join(', ') : '—' }
 										</dd>
 									</div>
 									<div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
@@ -190,8 +232,16 @@ export default function EntrepreneurPostulations() {
 										<dt className="text-sm font-medium leading-6 text-slate-700 dark:text-slate-400">Fotos</dt>
 										<dd className="mt-1 text-sm leading-6 text-slate-700 dark:text-slate-400 w-full sm:col-span-2 sm:mt-0">
 											<div className="grid grid-cols-3 gap-4">
-												{(project.photos || []).map((url, idx) => (
-													<img key={idx} src={url} alt="Foto del proyecto" className="w-40 h-40 object-cover" />
+												{(project.photos || []).map((photo, idx) => (
+													<img
+														key={idx}
+														src={normalizePhotoUrl(photo?.url || photo)}
+														alt="Foto del proyecto"
+														className="w-40 h-40 object-cover"
+														loading="lazy"
+														decoding="async"
+														referrerPolicy="no-referrer"
+													/>
 												))}
 											</div>
 										</dd>

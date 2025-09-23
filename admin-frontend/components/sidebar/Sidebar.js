@@ -28,6 +28,10 @@ export default function Sidebar() {
                 <Link href="/areas" className="ml-2">Áreas de estudio</Link>
             </dt>
             <dt className="flex">
+                <BookOpenIcon className="h-5 w-5"/>
+                <Link href="/categorias-emprendimientos" className="ml-2">Categorías Emprend.</Link>
+            </dt>
+            <dt className="flex">
                 <ExclamationCircleIcon className="h-5 w-5"/>
                 <Link href="/reportes" className="ml-2">Reportes</Link>
             </dt>
