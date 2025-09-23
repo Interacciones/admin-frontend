@@ -28,7 +28,7 @@ export default function Historial() {
   };
 
   const checkAdmin = async (currentUser) => {
-    const response = await fetch((`https://www.interaccionesuni.com/check-admin`), {
+    const response = await fetch((`http://localhost:3000/check-admin`), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

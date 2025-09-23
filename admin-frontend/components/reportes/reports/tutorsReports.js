@@ -60,7 +60,7 @@ export default function TutorsReports() {
 
     const fetchUpdate = async (datoDinamico) => {
         try {
-            const response = await fetch((`https://www.interaccionesuni.com/reports/tutor/ignore`), {
+            const response = await fetch((`http://localhost:3000/reports/tutor/ignore`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export default function TutorsReports() {
   
     const fetchDelete = async (datoDinamico) => {
         try {
-            const response = await fetch((`https://www.interaccionesuni.com/reports/tutor/eliminate`), {
+            const response = await fetch((`http://localhost:3000/reports/tutor/eliminate`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -120,7 +120,7 @@ export default function TutorsReports() {
 
     const fetchReportes = async () => {
         try {
-            const response = await fetch(`https://www.interaccionesuni.com/reports/tutor`, {
+            const response = await fetch(`http://localhost:3000/reports/tutor`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',

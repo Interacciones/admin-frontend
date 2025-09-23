@@ -1,7 +1,8 @@
 "use client";
-import AreasComponent from "./areas/Areas";
 import Sidebar from "../sidebar/Sidebar";
 import Topbar from "../topbar/Topbar";
+import CategoriesAdmin from "./categories/CategoriesAdmin";
+import { useState, useEffect } from "react";
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -9,11 +10,10 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase";
-import { useState, useEffect } from "react";
 import { useRouter } from 'next/router';
 import RouteLoader from "../RouteLoader";
 
-export default function Areas() {
+export default function Categories() {
   const [open, setOpen] = useState(false);
   const [redirectUser, setRedirectUser] = useState(false);
   const [authorized, setAuthorized] = useState(false);
@@ -53,7 +53,7 @@ export default function Areas() {
   if (redirectUser) {
     router.push('/login');
   }
-  
+
   return (
     <>
       <Dialog open={open} onClose={handleClose} aria-labelledby="alert-dialog-title" aria-describedby="alert-dialog-description" >
@@ -68,11 +68,11 @@ export default function Areas() {
       </Dialog>
       
       {authorized ? (
-        <div className="bg-white dark:bg-slate-900 min-w-screen min-h-screen flex flex-col">
+        <div className="bg-white min-w-screen min-h-screen flex flex-col">
           <Topbar/>
           <div className="flex flex-grow">
             <Sidebar/>
-            <AreasComponent/>
+            <CategoriesAdmin/>
           </div>
         </div>
       ) : (
@@ -81,3 +81,6 @@ export default function Areas() {
     </>
   )
 }
+
+
+

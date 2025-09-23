@@ -48,7 +48,7 @@ export default function Areas() {
     const fetchAreas = async () => {
         try {
             setLoading(true);
-            const response = await fetch((`https://www.interaccionesuni.com/subjects`), {
+            const response = await fetch((`http://localhost:3000/subjects`), {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ export default function Areas() {
 
     const confirmDelete = async () => {
         try {
-            const response = await fetch(`https://www.interaccionesuni.com/admin/subjects/${selectedArea.id}`, {
+            const response = await fetch(`http://localhost:3000/admin/subjects/${selectedArea.id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -100,7 +100,7 @@ export default function Areas() {
         if (!newSubject.trim()) return;
         
         try {
-            const response = await fetch('https://www.interaccionesuni.com/admin/subjects', {
+            const response = await fetch('http://localhost:3000/admin/subjects', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -66,7 +66,7 @@ export default function ComplainsTable() {
         }
 
         try {
-            const response = await fetch((`https://www.interaccionesuni.com/admin/complains/${id}`), {
+            const response = await fetch((`http://localhost:3000/admin/complains/${id}`), {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
@@ -102,7 +102,7 @@ export default function ComplainsTable() {
         }
 
         try {
-            const response = await fetch((`https://www.interaccionesuni.com/admin/complains/${id}`), {
+            const response = await fetch((`http://localhost:3000/admin/complains/${id}`), {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ export default function ComplainsTable() {
 
     const fetchComplains = async () => {
         try {
-            const response = await fetch(`https://www.interaccionesuni.com/admin/complains`, {
+            const response = await fetch(`http://localhost:3000/admin/complains`, {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
